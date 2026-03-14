@@ -1,0 +1,43 @@
+import { createServiceClient } from "@/lib/supabase/server";
+import { WidgetClient } from "./widget-client";
+
+export default async function WidgetPage({
+  params,
+}: {
+  params: { shopId: string };
+}) {
+  const supabase = await createServiceClient();
+
+  const { data: shop } = await supabase
+    .from("shops")
+    .select("id, name, welcome_message, logo_url, is_active")
+    .eq("id", params.shopId)
+    .eq("is_active", true)
+    .single();
+
+  if (!shop) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center px-6">
+          <p className="text-4xl mb-3">🔒</p>
+          <h1 className="text-lg font-semibold text-gray-700">
+            Boutique indisponible
+          </h1>
+          <p className="text-sm text-gray-400 mt-1">
+            Cette boutique n&apos;existe pas ou n&apos;est plus active.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <WidgetClient
+      shopId={shop.id}
+      shopName={shop.name}
+      welcomeMessage={
+        shop.welcome_message || "Bonjour ! Que souhaitez-vous commander ?"
+      }
+    />
+  );
+}

@@ -2,7 +2,13 @@ import Anthropic from "@anthropic-ai/sdk";
 import { buildSystemPrompt } from "./prompts";
 import type { TShop, TProduct, TBotResponse, TConversationMessage } from "@/types";
 
-const anthropic = new Anthropic();
+let _anthropic: Anthropic | null = null;
+function getAnthropic() {
+  if (!_anthropic) {
+    _anthropic = new Anthropic();
+  }
+  return _anthropic;
+}
 
 export async function chat(
   shop: TShop,
@@ -20,7 +26,7 @@ export async function chat(
     { role: "user" as const, content: userMessage },
   ];
 
-  const response = await anthropic.messages.create({
+  const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 1024,
     system: systemPrompt,

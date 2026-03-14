@@ -50,7 +50,7 @@ export default function HomePage() {
               Connexion
             </Link>
             <Link
-              href="/onboarding"
+              href="/signup"
               className="bg-green-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-green-600 transition-colors"
             >
               Essai gratuit
@@ -89,7 +89,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/onboarding"
+                  href="/signup"
                   className="group flex items-center justify-center gap-2 bg-green-500 text-white px-7 py-4 rounded-2xl text-base font-bold hover:bg-green-600 transition-all shadow-lg shadow-green-500/25"
                 >
                   Essai gratuit 14 jours
@@ -302,7 +302,7 @@ export default function HomePage() {
           </div>
           <div className="text-center mt-12">
             <Link
-              href="/onboarding"
+              href="/signup"
               className="group inline-flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-green-600 transition-all shadow-lg shadow-green-500/25"
             >
               Commencer maintenant
@@ -452,7 +452,7 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/onboarding" className="block text-center bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+              <Link href="/signup" className="block text-center bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors">
                 Essai gratuit
               </Link>
             </div>
@@ -484,7 +484,7 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/onboarding" className="block text-center bg-white text-green-600 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors">
+              <Link href="/signup" className="block text-center bg-white text-green-600 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors">
                 Essai gratuit 14 jours
               </Link>
             </div>
@@ -512,7 +512,7 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/onboarding" className="block text-center bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+              <Link href="/signup" className="block text-center bg-gray-100 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors">
                 Nous contacter
               </Link>
             </div>
@@ -578,7 +578,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/onboarding"
+              href="/signup"
               className="group flex items-center gap-2 bg-white text-green-600 px-8 py-4 rounded-2xl text-lg font-bold hover:bg-green-50 transition-all shadow-lg"
             >
               Demarrer gratuitement

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { DEMO_SHOP } from "@/lib/demo/data";
 import type { TShop } from "@/types";
 
 export function useShop() {
@@ -9,6 +10,13 @@ export function useShop() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Demo mode — return mock shop immediately
+    if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+      setShop(DEMO_SHOP);
+      setLoading(false);
+      return;
+    }
+
     const fetchShop = async () => {
       const supabase = createClient();
       const {

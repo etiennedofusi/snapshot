@@ -5,6 +5,14 @@ import { ChatBubble } from "./ChatBubble";
 import { Send, Loader2 } from "lucide-react";
 import type { TOrderItem } from "@/types";
 
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
+type ProductImage = {
+  url: string;
+  name: string;
+  price: number;
+};
+
 type Message = {
   id: string;
   role: "user" | "assistant";
@@ -12,6 +20,7 @@ type Message = {
   timestamp: string;
   order?: { items: TOrderItem[]; total: number } | null;
   paymentUrl?: string | null;
+  images?: ProductImage[] | null;
 };
 
 type ChatWidgetProps = {
@@ -66,36 +75,54 @@ export function ChatWidget({
     setLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          shopId,
-          message: text,
-          conversationId,
-        }),
-      });
+      if (isDemo) {
+        // Simulate typing delay
+        await new Promise((r) => setTimeout(r, 600 + Math.random() * 800));
+        const { demoChatReply } = await import("@/lib/demo/chat");
+        const response = demoChatReply(text);
 
-      const data = await res.json();
+        const botMsg: Message = {
+          id: `b-${Date.now()}`,
+          role: "assistant",
+          content: response.message,
+          timestamp: new Date().toISOString(),
+          order: response.order || null,
+          paymentUrl: response.paymentUrl || null,
+          images: response.images || null,
+        };
+        setMessages((prev) => [...prev, botMsg]);
+      } else {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            shopId,
+            message: text,
+            conversationId,
+          }),
+        });
 
-      if (!res.ok) {
-        throw new Error(data.error || "Erreur");
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Erreur");
+        }
+
+        if (data.conversationId) {
+          setConversationId(data.conversationId);
+        }
+
+        const botMsg: Message = {
+          id: `b-${Date.now()}`,
+          role: "assistant",
+          content: data.message,
+          timestamp: new Date().toISOString(),
+          order: data.order || null,
+          paymentUrl: data.paymentUrl || null,
+        };
+
+        setMessages((prev) => [...prev, botMsg]);
       }
-
-      if (data.conversationId) {
-        setConversationId(data.conversationId);
-      }
-
-      const botMsg: Message = {
-        id: `b-${Date.now()}`,
-        role: "assistant",
-        content: data.message,
-        timestamp: new Date().toISOString(),
-        order: data.order || null,
-        paymentUrl: data.paymentUrl || null,
-      };
-
-      setMessages((prev) => [...prev, botMsg]);
     } catch {
       const errorMsg: Message = {
         id: `e-${Date.now()}`,
@@ -136,6 +163,7 @@ export function ChatWidget({
             timestamp={msg.timestamp}
             order={msg.order}
             paymentUrl={msg.paymentUrl}
+            images={msg.images}
           />
         ))}
 

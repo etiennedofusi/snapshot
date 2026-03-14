@@ -2,12 +2,15 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { TProduct } from "@/types";
+import { DEMO_PRODUCTS } from "@/lib/demo/data";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { ProductForm, type ProductFormData } from "@/components/catalog/ProductForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Package, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 export default function CatalogPage() {
   const [products, setProducts] = useState<TProduct[]>([]);
@@ -17,6 +20,12 @@ export default function CatalogPage() {
   const [editingProduct, setEditingProduct] = useState<TProduct | null>(null);
 
   const fetchProducts = useCallback(async () => {
+    if (isDemo) {
+      setProducts(DEMO_PRODUCTS);
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/products");
       const data = await res.json();
@@ -35,6 +44,25 @@ export default function CatalogPage() {
   }, [fetchProducts]);
 
   const handleCreate = async (formData: ProductFormData) => {
+    if (isDemo) {
+      const newProduct: TProduct = {
+        id: `prod-${Date.now()}`,
+        shop_id: "demo-shop-001",
+        name: formData.name,
+        description: formData.description || null,
+        price: formData.price,
+        photo_url: null,
+        category: formData.category || null,
+        is_available: true,
+        sort_order: products.length,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      setProducts((prev) => [...prev, newProduct]);
+      toast.success("Produit ajoute");
+      return;
+    }
+
     const res = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -50,6 +78,20 @@ export default function CatalogPage() {
 
   const handleEdit = async (formData: ProductFormData) => {
     if (!editingProduct) return;
+
+    if (isDemo) {
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === editingProduct.id
+            ? { ...p, ...formData, updated_at: new Date().toISOString() }
+            : p
+        )
+      );
+      toast.success("Produit modifie");
+      setEditingProduct(null);
+      return;
+    }
+
     const res = await fetch(`/api/products/${editingProduct.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -65,10 +107,11 @@ export default function CatalogPage() {
   };
 
   const handleToggleAvailable = async (id: string, available: boolean) => {
-    // Optimistic update
     setProducts((prev) =>
       prev.map((p) => (p.id === id ? { ...p, is_available: available } : p))
     );
+
+    if (isDemo) return;
 
     const res = await fetch(`/api/products/${id}`, {
       method: "PATCH",
@@ -77,7 +120,6 @@ export default function CatalogPage() {
     });
 
     if (!res.ok) {
-      // Revert
       setProducts((prev) =>
         prev.map((p) => (p.id === id ? { ...p, is_available: !available } : p))
       );
@@ -88,6 +130,12 @@ export default function CatalogPage() {
   const handleDelete = async (id: string) => {
     const product = products.find((p) => p.id === id);
     if (!confirm(`Supprimer "${product?.name}" ?`)) return;
+
+    if (isDemo) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      toast.success("Produit supprime");
+      return;
+    }
 
     const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
     if (res.ok) {

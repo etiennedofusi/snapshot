@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useOrderSound } from "@/lib/hooks/useOrderSound";
 import { OrderCard } from "./OrderCard";
 import { printTicket } from "./PrintTicket";
+import { DEMO_ORDERS, DEMO_SHOP } from "@/lib/demo/data";
 import type { TOrder, TOrderStatus } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Bell, BellOff, RefreshCw } from "lucide-react";
@@ -17,6 +18,8 @@ const FILTERS: { value: TOrderStatus | "all"; label: string }[] = [
   { value: "preparing", label: "En cours" },
   { value: "ready", label: "Pretes" },
 ];
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 type OrderBoardProps = {
   shopName: string;
@@ -32,13 +35,20 @@ export function OrderBoard({ shopName }: OrderBoardProps) {
   const orderIdsRef = useRef<Set<string>>(new Set());
 
   const fetchOrders = useCallback(async () => {
+    if (isDemo) {
+      setOrders(DEMO_ORDERS);
+      setShopId(DEMO_SHOP.id);
+      orderIdsRef.current = new Set(DEMO_ORDERS.map((o) => o.id));
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/orders?today=true");
       const data = await res.json();
       if (res.ok) {
         setOrders(data.orders as TOrder[]);
         setShopId(data.shopId);
-        // Track current order IDs
         orderIdsRef.current = new Set(
           (data.orders as TOrder[]).map((o) => o.id)
         );
@@ -55,9 +65,9 @@ export function OrderBoard({ shopName }: OrderBoardProps) {
     fetchOrders();
   }, [fetchOrders]);
 
-  // Supabase Realtime subscription
+  // Supabase Realtime subscription (skip in demo)
   useEffect(() => {
-    if (!shopId) return;
+    if (!shopId || isDemo) return;
 
     const supabase = createClient();
     const channel = supabase
@@ -75,7 +85,6 @@ export function OrderBoard({ shopName }: OrderBoardProps) {
             const newOrder = payload.new as TOrder;
             setOrders((prev) => [newOrder, ...prev]);
 
-            // Sound + notification for new orders
             if (soundOn && !orderIdsRef.current.has(newOrder.id)) {
               playSound();
               toast.success(
@@ -118,6 +127,11 @@ export function OrderBoard({ shopName }: OrderBoardProps) {
       prev.map((o) => (o.id === id ? { ...o, status } : o))
     );
 
+    if (isDemo) {
+      toast.success("Statut mis a jour");
+      return;
+    }
+
     const res = await fetch(`/api/orders/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -125,7 +139,7 @@ export function OrderBoard({ shopName }: OrderBoardProps) {
     });
 
     if (!res.ok) {
-      fetchOrders(); // Revert
+      fetchOrders();
       toast.error("Erreur mise a jour");
     }
   };

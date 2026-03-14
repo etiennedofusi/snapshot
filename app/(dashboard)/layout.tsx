@@ -12,6 +12,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 const NAV_ITEMS = [
   { href: "/orders", label: "Commandes", icon: ClipboardList },
@@ -29,6 +32,10 @@ export default function DashboardLayout({
   const router = useRouter();
 
   const handleLogout = async () => {
+    if (isDemo) {
+      toast.info("Mode demo — deconnexion desactivee");
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");
@@ -36,6 +43,14 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Demo banner */}
+      {isDemo && (
+        <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-center py-1.5 text-xs font-medium flex items-center justify-center gap-2">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+          Mode Demo — Boulangerie Marie
+        </div>
+      )}
+
       {/* Content */}
       <main className="flex-1 pb-20">{children}</main>
 

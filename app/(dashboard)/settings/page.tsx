@@ -19,8 +19,11 @@ import {
   Globe,
   Copy,
   Check,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 export default function SettingsPage() {
   const { shop, loading } = useShop();
@@ -43,6 +46,12 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setSaving(true);
+    if (isDemo) {
+      await new Promise((r) => setTimeout(r, 500));
+      toast.success("Parametres sauvegardes");
+      setSaving(false);
+      return;
+    }
     try {
       const res = await fetch("/api/shops", {
         method: "PATCH",
@@ -240,18 +249,28 @@ export default function SettingsPage() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            className="w-full h-11 text-sm gap-2"
-            onClick={copyWidgetCode}
-          >
-            {copied ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
-            {copied ? "Copie !" : "Copier le code d'integration"}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="flex-1 h-11 text-sm gap-2"
+              onClick={copyWidgetCode}
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-500" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+              {copied ? "Copie !" : "Copier le code"}
+            </Button>
+            <Button
+              variant="default"
+              className="flex-1 h-11 text-sm gap-2"
+              onClick={() => window.open(`/widget/${shop.id}`, "_blank")}
+            >
+              <ExternalLink className="h-4 w-4" />
+              Tester le widget
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

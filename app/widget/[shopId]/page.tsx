@@ -1,11 +1,25 @@
-import { createServiceClient } from "@/lib/supabase/server";
 import { WidgetClient } from "./widget-client";
+import { DEMO_SHOP } from "@/lib/demo/data";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 export default async function WidgetPage({
   params,
 }: {
   params: { shopId: string };
 }) {
+  // Demo mode — use mock shop
+  if (isDemo) {
+    return (
+      <WidgetClient
+        shopId={DEMO_SHOP.id}
+        shopName={DEMO_SHOP.name}
+        welcomeMessage={DEMO_SHOP.welcome_message}
+      />
+    );
+  }
+
+  const { createServiceClient } = await import("@/lib/supabase/server");
   const supabase = await createServiceClient();
 
   const { data: shop } = await supabase

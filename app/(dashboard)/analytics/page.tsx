@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { DEMO_ANALYTICS } from "@/lib/demo/data";
 import { KPIWidget } from "@/components/dashboard/KPIWidget";
 import { HourlyChart } from "@/components/dashboard/HourlyChart";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
@@ -14,6 +15,8 @@ import {
   CreditCard,
   Banknote,
 } from "lucide-react";
+
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 type AnalyticsData = {
   today: { revenue: number; count: number };
@@ -30,6 +33,20 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
+    if (isDemo) {
+      setData({
+        today: { revenue: DEMO_ANALYTICS.today.revenue, count: DEMO_ANALYTICS.today.orders },
+        week: { revenue: DEMO_ANALYTICS.week.revenue, growth: DEMO_ANALYTICS.week.growth },
+        month: { revenue: DEMO_ANALYTICS.month.revenue },
+        topProduct: DEMO_ANALYTICS.topProduct,
+        hourly: DEMO_ANALYTICS.hourly.map((h) => h.count),
+        paymentSplit: { online: DEMO_ANALYTICS.paymentSplit.online, inStore: DEMO_ANALYTICS.paymentSplit.on_pickup },
+        dailyRevenue: DEMO_ANALYTICS.dailyRevenue.map((d) => ({ date: d.date, total: d.revenue })),
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/analytics");
       if (res.ok) {

@@ -2,6 +2,20 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
+  // Demo mode — skip all auth
+  if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+    const { pathname } = request.nextUrl;
+
+    // In demo mode, redirect login to /orders
+    if (pathname === "/login" || pathname === "/onboarding") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/orders";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(

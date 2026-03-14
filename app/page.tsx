@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { MascotHero } from "@/components/ui/mascot";
 import {
   MessageCircle,
   ShoppingBag,
@@ -108,9 +109,13 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Right: phone mockup with chat */}
+            {/* Right: mascot + phone mockup */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
+                {/* Mascot floating above phone */}
+                <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-10">
+                  <MascotHero />
+                </div>
                 {/* Phone frame */}
                 <div className="w-[300px] h-[580px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl shadow-gray-900/30">
                   <div className="w-full h-full bg-[#e5ddd5] rounded-[2.3rem] overflow-hidden flex flex-col">

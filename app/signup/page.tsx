@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
+import { Mascot } from "@/components/ui/mascot";
 import { cn } from "@/lib/utils";
 import {
   Store,
@@ -19,7 +20,6 @@ import {
   Sparkles,
   Crown,
   Rocket,
-  PartyPopper,
   Euro,
   Trash2,
 } from "lucide-react";
@@ -258,8 +258,8 @@ export default function SignupPage() {
           {step === 0 && (
             <div key="step0" className="animate-slide-in space-y-8">
               <div className="text-center">
-                <div className="h-16 w-16 rounded-2xl bg-green-100 flex items-center justify-center mx-auto mb-4 animate-float">
-                  <Store className="h-8 w-8 text-green-600" />
+                <div className="flex justify-center mb-4">
+                  <Mascot size="lg" mood="happy" />
                 </div>
                 <h1 className="text-3xl font-black mb-2">Comment s&apos;appelle votre commerce ?</h1>
                 <p className="text-gray-500">C&apos;est le nom que verront vos clients</p>
@@ -363,8 +363,29 @@ export default function SignupPage() {
           {step === 3 && (
             <div key="step3" className="animate-slide-in space-y-6">
               <div className="text-center">
-                <h1 className="text-3xl font-black mb-2">Ajoutez vos produits</h1>
-                <p className="text-gray-500">L&apos;IA les proposera a vos clients</p>
+                <div className="flex justify-center mb-3">
+                  <Mascot size="md" mood="wink" />
+                </div>
+                <h1 className="text-3xl font-black mb-2">Votre catalogue</h1>
+                <p className="text-gray-500">Ajoutez quelques produits ou faites-le plus tard</p>
+              </div>
+
+              {/* Primary CTA: Skip */}
+              <button
+                onClick={goNext}
+                className="w-full flex items-center justify-between bg-white border-2 border-gray-200 hover:border-green-400 rounded-2xl px-5 py-4 transition-all group"
+              >
+                <div className="text-left">
+                  <p className="font-bold text-base">Je configurerai mon catalogue plus tard</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Vous pourrez le faire depuis l&apos;onglet Produits</p>
+                </div>
+                <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-green-500 group-hover:translate-x-1 transition-all" />
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-xs text-gray-400 font-medium">ou ajoutez-en maintenant</span>
+                <div className="flex-1 h-px bg-gray-200" />
               </div>
 
               {/* Quick add */}
@@ -443,6 +464,9 @@ export default function SignupPage() {
           {step === 4 && (
             <div key="step4" className="animate-slide-in space-y-6">
               <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  <Mascot size="md" mood="excited" />
+                </div>
                 <h1 className="text-3xl font-black mb-2">Voici votre boutique !</h1>
                 <p className="text-gray-500">Tout est pret pour recevoir des commandes</p>
               </div>
@@ -675,8 +699,8 @@ export default function SignupPage() {
           {/* ─── DONE ─── */}
           {done && (
             <div key="done" className="animate-scale-in text-center space-y-6 pt-8">
-              <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center mx-auto">
-                <PartyPopper className="h-12 w-12 text-green-500" />
+              <div className="flex justify-center">
+                <Mascot size="lg" mood="excited" />
               </div>
               <div>
                 <h1 className="text-3xl font-black mb-2">Bienvenue sur SnapShop !</h1>

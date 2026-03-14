@@ -123,3 +123,56 @@
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* ─── Scroll-triggered reveal animations ─── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal-card {
+  from { opacity: 0; transform: scale(0.92) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(34,197,94,0.3), 0 0 40px rgba(59,130,246,0.1); }
+  50%      { box-shadow: 0 0 30px rgba(34,197,94,0.5), 0 0 60px rgba(59,130,246,0.2); }
+}
+
+/* CSS scroll-driven animations (Chrome 115+, Safari 18.4+) */
+.scroll-reveal {
+  animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
+}
+.scroll-reveal-card {
+  animation: reveal-card 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
+}
+
+/* Animated gradient bg */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+.animate-glow { animation: glow-pulse 3s ease-in-out infinite; }
+
+/* JS fallback for scroll reveal (Safari/Firefox compat) */
+.scroll-reveal-js {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.scroll-reveal-js.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@supports (animation-timeline: view()) {
+  .scroll-reveal-js { opacity: 1; transform: none; transition: none; }
+}

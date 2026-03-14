@@ -160,6 +160,11 @@ export default function SignupPage() {
   const [done, setDone] = useState(false);
 
   const progress = ((step + 1) / TOTAL_STEPS) * 100;
+  const progressColor = step < 3
+    ? "from-green-400 to-green-500"
+    : step < 5
+      ? "from-green-400 via-teal-400 to-teal-500"
+      : "from-green-400 via-teal-400 to-blue-500";
 
   const triggerConfetti = useCallback(() => {
     setShowConfetti(true);
@@ -223,14 +228,14 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-green-50/30 via-white to-blue-50/30 flex flex-col">
       {showConfetti && <Confetti />}
 
       {/* Top bar */}
       <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-100 px-6 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-green-500 flex items-center justify-center">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center">
               <ShoppingBag className="h-4 w-4 text-white" />
             </div>
             <span className="font-black text-lg">Snap<span className="text-green-500">Shop</span></span>
@@ -243,7 +248,7 @@ export default function SignupPage() {
         <div className="max-w-lg mx-auto mt-2">
           <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-700 ease-out"
+              className={`h-full bg-gradient-to-r ${progressColor} rounded-full transition-all duration-700 ease-out`}
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -669,7 +674,7 @@ export default function SignupPage() {
                 className={cn(
                   "w-full h-16 rounded-2xl text-lg font-bold flex items-center justify-center gap-3 transition-all duration-300 relative overflow-hidden",
                   canProceed() && !processing
-                    ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl shadow-green-500/30 hover:shadow-2xl hover:shadow-green-500/40 hover:scale-[1.02] active:scale-[0.98]"
+                    ? "bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-xl shadow-teal-500/30 hover:shadow-2xl hover:shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98]"
                     : "bg-gray-200 text-gray-400"
                 )}
               >

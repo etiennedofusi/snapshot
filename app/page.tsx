@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { MascotHero } from "@/components/ui/mascot";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import {
   MessageCircle,
   ShoppingBag,
@@ -31,7 +32,7 @@ export default function HomePage() {
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl bg-green-500 flex items-center justify-center">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center">
               <ShoppingBag className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-black tracking-tight">
@@ -52,7 +53,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/signup"
-              className="bg-green-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-green-600 transition-colors"
+              className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:from-green-600 hover:to-teal-600 transition-all"
             >
               Essai gratuit
             </Link>
@@ -62,9 +63,10 @@ export default function HomePage() {
 
       {/* ==================== HERO ==================== */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50" />
-        <div className="absolute top-20 -right-40 w-[500px] h-[500px] bg-green-100 rounded-full blur-3xl opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-sky-50/30 to-blue-50/40" />
+        <div className="absolute top-20 -right-40 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-40" />
         <div className="absolute -bottom-20 -left-40 w-[400px] h-[400px] bg-emerald-100 rounded-full blur-3xl opacity-30" />
+        <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-amber-100 rounded-full blur-3xl opacity-20" />
 
         <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-28">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -91,7 +93,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/signup"
-                  className="group flex items-center justify-center gap-2 bg-green-500 text-white px-7 py-4 rounded-2xl text-base font-bold hover:bg-green-600 transition-all shadow-lg shadow-green-500/25"
+                  className="group flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-teal-500 text-white px-7 py-4 rounded-2xl text-base font-bold hover:from-green-600 hover:to-teal-600 transition-all shadow-lg shadow-green-500/25 animate-glow"
                 >
                   Essai gratuit 14 jours
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -192,7 +194,7 @@ export default function HomePage() {
       </section>
 
       {/* ==================== SOCIAL PROOF ==================== */}
-      <section className="py-12 bg-gray-50 border-y border-gray-100">
+      <section className="py-12 bg-gradient-to-r from-amber-50/40 via-white to-green-50/30 border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
@@ -236,27 +238,32 @@ export default function HomePage() {
                 problem: "\"Les clients oublient de venir chercher\"",
                 solution: "Notification automatique + paiement en ligne en amont",
               },
-            ].map((item) => (
-              <div
-                key={item.problem}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img src={item.img} alt="" className="w-full h-44 object-cover" />
-                <div className="p-5">
-                  <p className="font-bold text-red-500 text-base mb-3">{item.problem}</p>
-                  <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-gray-600 leading-relaxed">{item.solution}</p>
+            ].map((item, i) => (
+              <ScrollReveal key={item.problem} delay={i * 120}>
+                <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                  <img src={item.img} alt="" className="w-full h-44 object-cover" />
+                  <div className="p-5">
+                    <p className="font-bold text-red-500 text-base mb-3">{item.problem}</p>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-gray-600 leading-relaxed">{item.solution}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* ==================== HOW IT WORKS ==================== */}
-      <section id="comment-ca-marche" className="py-20 bg-gray-50">
+      {/* Wave divider */}
+      <div className="relative -mb-1">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px]">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" className="fill-blue-50/50" />
+        </svg>
+      </div>
+      <section id="comment-ca-marche" className="py-20 bg-gradient-to-b from-blue-50/50 via-sky-50/30 to-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-black mb-4">Pret en 5 minutes</h2>
@@ -298,23 +305,25 @@ export default function HomePage() {
                 color: "bg-amber-500",
                 img: "https://images.unsplash.com/photo-1556742393-d75f468bfcb0?w=300&h=200&fit=crop&q=80",
               },
-            ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="rounded-xl overflow-hidden mb-4 mx-auto max-w-[200px]">
-                  <img src={item.img} alt={item.title} className="w-full h-28 object-cover" />
+            ].map((item, i) => (
+              <ScrollReveal key={item.step} delay={i * 150}>
+                <div className="text-center">
+                  <div className="rounded-xl overflow-hidden mb-4 mx-auto max-w-[200px] shadow-md hover:shadow-lg transition-shadow">
+                    <img src={item.img} alt={item.title} className="w-full h-28 object-cover hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className={`inline-flex items-center justify-center h-7 w-7 rounded-full text-xs font-bold text-white mb-2 ${item.color}`}>
+                    {item.step}
+                  </div>
+                  <h3 className="text-base font-bold mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-500">{item.desc}</p>
                 </div>
-                <div className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-xs font-bold text-gray-500 mb-2">
-                  {item.step}
-                </div>
-                <h3 className="text-base font-bold mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-500">{item.desc}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
           <div className="text-center mt-12">
             <Link
               href="/signup"
-              className="group inline-flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-2xl text-base font-bold hover:bg-green-600 transition-all shadow-lg shadow-green-500/25"
+              className="group inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-blue-500 text-white px-8 py-4 rounded-2xl text-base font-bold hover:from-teal-600 hover:to-blue-600 transition-all shadow-lg shadow-teal-500/25"
             >
               Commencer maintenant
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -370,16 +379,18 @@ export default function HomePage() {
                 desc: "CA du jour, produit star, heures de pointe. En un coup d'oeil.",
                 color: "text-indigo-600 bg-indigo-50",
               },
-            ].map((feature) => (
-              <div key={feature.title} className="flex gap-4">
-                <div className={`h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0 ${feature.color}`}>
-                  <feature.icon className="h-6 w-6" />
+            ].map((feature, i) => (
+              <ScrollReveal key={feature.title} delay={i * 80}>
+                <div className="flex gap-4 p-4 rounded-xl hover:bg-gray-50 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300">
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0 ${feature.color}`}>
+                    <feature.icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base mb-1">{feature.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-base mb-1">{feature.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{feature.desc}</p>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -447,7 +458,13 @@ export default function HomePage() {
       </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
-      <section className="py-20 bg-gray-50">
+      {/* Wave divider */}
+      <div className="relative -mb-1">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px]">
+          <path d="M0,20 C480,60 960,0 1440,40 L1440,60 L0,60 Z" className="fill-green-50/30" />
+        </svg>
+      </div>
+      <section className="py-20 bg-gradient-to-b from-green-50/30 via-white to-blue-50/20">
         <div className="max-w-5xl mx-auto px-6">
           <h2 className="text-3xl font-black text-center mb-14">
             Ils utilisent SnapShop au quotidien
@@ -460,6 +477,7 @@ export default function HomePage() {
                 quote: "Mes clients commandent sur WhatsApp en 30 secondes. J'ai augmente mon CA de 40% en click & collect.",
                 stars: 5,
                 avatar: "https://images.unsplash.com/photo-1594744803329-e58b31239ac0?w=120&h=120&fit=crop&crop=face&q=80",
+                accent: "border-t-green-400",
               },
               {
                 name: "Karim B.",
@@ -467,6 +485,7 @@ export default function HomePage() {
                 quote: "Avant je perdais 1h par jour a repondre aux messages. Maintenant l'IA gere tout et je me concentre sur la cuisine.",
                 stars: 5,
                 avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=120&h=120&fit=crop&crop=face&q=80",
+                accent: "border-t-teal-400",
               },
               {
                 name: "Sophie L.",
@@ -474,9 +493,11 @@ export default function HomePage() {
                 quote: "L'onboarding a pris 5 minutes. Mes clients adorent commander par Instagram DM. C'est magique.",
                 stars: 5,
                 avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=face&q=80",
+                accent: "border-t-blue-400",
               },
-            ].map((t) => (
-              <div key={t.name} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+            ].map((t, i) => (
+              <ScrollReveal key={t.name} delay={i * 120}>
+                <div className={`bg-white rounded-2xl p-6 border border-gray-100 border-t-4 ${t.accent} shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300`}>
                 <div className="flex gap-0.5 mb-4">
                   {Array.from({ length: t.stars }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
@@ -493,6 +514,7 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -536,7 +558,7 @@ export default function HomePage() {
             </div>
 
             {/* Pro — recommended */}
-            <div className="bg-green-500 rounded-2xl p-6 text-white flex flex-col relative shadow-xl shadow-green-500/20 scale-[1.03]">
+            <div className="bg-gradient-to-br from-green-500 via-teal-500 to-blue-500 animate-gradient rounded-2xl p-6 text-white flex flex-col relative shadow-xl shadow-teal-500/20 scale-[1.03]">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">
                 Populaire
               </div>
@@ -644,20 +666,33 @@ export default function HomePage() {
       </section>
 
       {/* ==================== FINAL CTA ==================== */}
-      <section className="py-24 bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 relative overflow-hidden">
+      {/* Wave divider */}
+      <div className="relative -mb-1">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[50px] md:h-[70px]">
+          <defs>
+            <linearGradient id="cta-wave" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#22c55e" />
+              <stop offset="50%" stopColor="#14b8a6" />
+              <stop offset="100%" stopColor="#3b82f6" />
+            </linearGradient>
+          </defs>
+          <path d="M0,40 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="url(#cta-wave)" />
+        </svg>
+      </div>
+      <section className="py-24 bg-gradient-to-br from-green-500 via-teal-600 to-blue-600 animate-gradient relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-green-400 rounded-full blur-3xl opacity-20" />
-        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-emerald-400 rounded-full blur-3xl opacity-20" />
+        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-blue-400 rounded-full blur-3xl opacity-20" />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
             Pret a transformer vos messages en commandes ?
           </h2>
-          <p className="text-green-100 text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-teal-100 text-lg mb-8 max-w-xl mx-auto">
             Rejoignez les 150+ commercants qui utilisent SnapShop pour augmenter leur CA en click & collect.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/signup"
-              className="group flex items-center gap-2 bg-white text-green-600 px-8 py-4 rounded-2xl text-lg font-bold hover:bg-green-50 transition-all shadow-lg"
+              className="group flex items-center gap-2 bg-white text-teal-600 px-8 py-4 rounded-2xl text-lg font-bold hover:bg-teal-50 transition-all shadow-lg"
             >
               Demarrer gratuitement
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -670,7 +705,7 @@ export default function HomePage() {
               Tester la demo
             </Link>
           </div>
-          <div className="flex items-center justify-center gap-6 mt-8 text-green-100 text-sm">
+          <div className="flex items-center justify-center gap-6 mt-8 text-teal-100 text-sm">
             <span className="flex items-center gap-1.5"><Shield className="h-4 w-4" /> Sans engagement</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" /> Pret en 5 min</span>
             <span className="flex items-center gap-1.5"><CreditCard className="h-4 w-4" /> Sans CB</span>
@@ -683,7 +718,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="h-5 w-5 text-green-400" />
+              <ShoppingBag className="h-5 w-5 text-teal-400" />
               <span className="font-bold text-white">SnapShop</span>
               <span className="text-gray-500 text-sm">— Click & Collect SaaS</span>
             </div>

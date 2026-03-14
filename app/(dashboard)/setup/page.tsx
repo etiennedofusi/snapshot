@@ -23,6 +23,11 @@ import {
   ExternalLink,
   Smartphone,
   Sparkles,
+  Package,
+  Plus,
+  Trash2,
+  ImageIcon,
+  Euro,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -32,20 +37,51 @@ const STEPS = [
   { title: "WhatsApp", subtitle: "Connectez votre numero", icon: MessageCircle },
   { title: "Instagram", subtitle: "Connectez votre compte", icon: Camera },
   { title: "Widget Web", subtitle: "Integrez sur votre site", icon: Globe },
+  { title: "Vos produits", subtitle: "Ajoutez votre catalogue", icon: Package },
   { title: "C'est pret !", subtitle: "Commencez a recevoir", icon: Sparkles },
-] as const;
+];
+
+type QuickProduct = {
+  id: string;
+  name: string;
+  price: string;
+  category: string;
+};
+
+const SUGGESTED_PRODUCTS = [
+  { name: "Croissant beurre", price: "1.30", category: "Viennoiseries" },
+  { name: "Pain au chocolat", price: "1.40", category: "Viennoiseries" },
+  { name: "Baguette tradition", price: "1.50", category: "Pains" },
+  { name: "Cafe expresso", price: "1.50", category: "Boissons" },
+  { name: "Sandwich jambon-beurre", price: "4.50", category: "Snacking" },
+  { name: "Tarte aux pommes", price: "3.50", category: "Patisseries" },
+];
 
 export default function OnboardingDemoPage() {
   const [step, setStep] = useState(0);
   const [connecting, setConnecting] = useState(false);
 
-  // Step states
+  // Step 0: Boutique
   const [name, setName] = useState("Boulangerie Marie");
   const [phone, setPhone] = useState("06 12 34 56 78");
   const [address, setAddress] = useState("12 rue de la Paix, 75002 Paris");
+
+  // Step 1-2: Channels
   const [whatsappConnected, setWhatsappConnected] = useState(false);
   const [instaConnected, setInstaConnected] = useState(false);
+
+  // Step 3: Widget
   const [widgetCopied, setWidgetCopied] = useState(false);
+
+  // Step 4: Products
+  const [products, setProducts] = useState<QuickProduct[]>([
+    { id: "1", name: "Croissant beurre", price: "1.30", category: "Viennoiseries" },
+    { id: "2", name: "Pain au chocolat", price: "1.40", category: "Viennoiseries" },
+    { id: "3", name: "Baguette tradition", price: "1.50", category: "Pains" },
+  ]);
+  const [newName, setNewName] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const [newCategory, setNewCategory] = useState("");
 
   const simulateConnect = (callback: () => void) => {
     setConnecting(true);
@@ -73,6 +109,36 @@ export default function OnboardingDemoPage() {
     setTimeout(() => setWidgetCopied(false), 2000);
   };
 
+  const addProduct = () => {
+    if (!newName.trim() || !newPrice.trim()) return;
+    setProducts((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        name: newName.trim(),
+        price: newPrice.trim(),
+        category: newCategory.trim() || "Autres",
+      },
+    ]);
+    setNewName("");
+    setNewPrice("");
+    setNewCategory("");
+    toast.success("Produit ajoute !");
+  };
+
+  const addSuggested = (s: typeof SUGGESTED_PRODUCTS[0]) => {
+    if (products.some((p) => p.name === s.name)) return;
+    setProducts((prev) => [
+      ...prev,
+      { id: Date.now().toString(), ...s },
+    ]);
+    toast.success(`${s.name} ajoute !`);
+  };
+
+  const removeProduct = (id: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  };
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
       {/* Header */}
@@ -84,11 +150,11 @@ export default function OnboardingDemoPage() {
       {/* Progress bar */}
       <div className="px-4 py-3">
         <div className="flex items-center gap-1">
-          {STEPS.map((s, i) => (
-            <div key={i} className="flex-1 flex items-center gap-1">
+          {STEPS.map((_, i) => (
+            <div key={i} className="flex-1">
               <div
                 className={cn(
-                  "h-1.5 rounded-full flex-1 transition-colors",
+                  "h-1.5 rounded-full transition-colors",
                   i <= step ? "bg-green-500" : "bg-gray-200"
                 )}
               />
@@ -116,7 +182,7 @@ export default function OnboardingDemoPage() {
       </div>
 
       {/* Step content */}
-      <div className="flex-1 px-4 pb-4">
+      <div className="flex-1 px-4 pb-4 overflow-y-auto">
         {/* Step 0: Boutique info */}
         {step === 0 && (
           <div className="space-y-4">
@@ -194,7 +260,6 @@ export default function OnboardingDemoPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {/* QR Code mockup */}
                     <div className="bg-gray-50 rounded-xl p-6 text-center">
                       <div className="w-40 h-40 mx-auto bg-white rounded-xl border-2 border-gray-200 flex items-center justify-center mb-3">
                         <QrCode className="h-24 w-24 text-gray-300" />
@@ -271,7 +336,6 @@ export default function OnboardingDemoPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {/* Instagram OAuth mockup */}
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 text-center">
                       <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-purple-200">
                         <Camera className="h-10 w-10 text-white" />
@@ -337,7 +401,6 @@ export default function OnboardingDemoPage() {
                 </div>
 
                 <div className="space-y-4">
-                  {/* Code snippet */}
                   <div className="bg-gray-900 rounded-xl p-4 font-mono text-sm text-green-400 overflow-x-auto">
                     <span className="text-gray-500">&lt;!-- Ajoutez avant &lt;/body&gt; --&gt;</span>
                     <br />
@@ -372,31 +435,24 @@ export default function OnboardingDemoPage() {
                       onClick={() => window.open("/widget/demo-shop-001", "_blank")}
                     >
                       <ExternalLink className="h-4 w-4" />
-                      Tester le widget
+                      Tester
                     </Button>
                   </div>
 
-                  {/* Preview */}
                   <div className="bg-gray-50 rounded-xl p-4">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">
-                      Apercu sur votre site
-                    </p>
-                    <div className="bg-white rounded-lg border border-gray-200 h-48 relative overflow-hidden">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3">Apercu</p>
+                    <div className="bg-white rounded-lg border border-gray-200 h-40 relative overflow-hidden">
                       <div className="p-4">
                         <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
                         <div className="h-3 w-48 bg-gray-100 rounded mb-2" />
                         <div className="h-3 w-40 bg-gray-100 rounded" />
                       </div>
-                      {/* Chat bubble floating */}
                       <div className="absolute bottom-3 right-3">
                         <div className="h-14 w-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/30">
                           <MessageCircle className="h-7 w-7 text-white" />
                         </div>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2 text-center">
-                      Le bouton de chat apparait en bas a droite de votre site
-                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -411,8 +467,136 @@ export default function OnboardingDemoPage() {
           </div>
         )}
 
-        {/* Step 4: Done! */}
+        {/* Step 4: Products / Catalogue */}
         {step === 4 && (
+          <div className="space-y-4">
+            <Card>
+              <CardContent className="pt-5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                    <Package className="h-6 w-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Vos produits</h3>
+                    <p className="text-xs text-muted-foreground">
+                      L&apos;IA utilisera ce catalogue pour prendre les commandes
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick add form */}
+                <div className="bg-gray-50 rounded-xl p-3 mb-4">
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                    Ajouter un produit
+                  </p>
+                  <div className="flex gap-2 mb-2">
+                    <Input
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      placeholder="Nom du produit"
+                      className="h-11 text-sm flex-[2]"
+                    />
+                    <div className="relative flex-1">
+                      <Input
+                        value={newPrice}
+                        onChange={(e) => setNewPrice(e.target.value)}
+                        placeholder="Prix"
+                        type="number"
+                        step="0.01"
+                        className="h-11 text-sm pr-7"
+                      />
+                      <Euro className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      placeholder="Categorie (optionnel)"
+                      className="h-11 text-sm flex-1"
+                    />
+                    <Button
+                      onClick={addProduct}
+                      disabled={!newName.trim() || !newPrice.trim()}
+                      className="h-11 px-4 gap-1.5 bg-green-500 hover:bg-green-600"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Ajouter
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Current products */}
+                {products.length > 0 && (
+                  <div className="space-y-1.5 mb-4">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Vos produits ({products.length})
+                    </p>
+                    {products.map((p) => (
+                      <div
+                        key={p.id}
+                        className="flex items-center gap-3 bg-white border border-gray-100 rounded-xl px-3 py-2.5"
+                      >
+                        <div className="h-9 w-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                          <ImageIcon className="h-4 w-4 text-gray-300" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{p.name}</p>
+                          <p className="text-[11px] text-gray-400">{p.category}</p>
+                        </div>
+                        <span className="text-sm font-bold">{p.price}€</span>
+                        <button
+                          onClick={() => removeProduct(p.id)}
+                          className="h-8 w-8 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Suggestions */}
+                <div>
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                    Ajout rapide
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {SUGGESTED_PRODUCTS.filter(
+                      (s) => !products.some((p) => p.name === s.name)
+                    ).map((s) => (
+                      <button
+                        key={s.name}
+                        onClick={() => addSuggested(s)}
+                        className="inline-flex items-center gap-1 bg-gray-100 hover:bg-green-50 hover:text-green-700 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
+                      >
+                        <Plus className="h-3 w-3" />
+                        {s.name} ({s.price}€)
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="bg-blue-50 rounded-xl p-3 flex items-start gap-2">
+              <Package className="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-blue-600">
+                Vous pourrez ajouter des photos et modifier vos produits a tout moment depuis l&apos;onglet <strong>Produits</strong>.
+              </p>
+            </div>
+
+            <button
+              onClick={handleNext}
+              className="text-sm text-muted-foreground text-center w-full hover:text-gray-600"
+            >
+              Je ferai plus tard →
+            </button>
+          </div>
+        )}
+
+        {/* Step 5: Done! */}
+        {step === 5 && (
           <div className="space-y-4">
             <Card>
               <CardContent className="pt-8 pb-8 text-center">
@@ -441,7 +625,7 @@ export default function OnboardingDemoPage() {
                     {whatsappConnected ? (
                       <CheckCircle2 className="h-5 w-5 text-green-500" />
                     ) : (
-                      <span className="text-xs text-gray-400">Non connecte</span>
+                      <span className="text-xs text-gray-400">Plus tard</span>
                     )}
                   </div>
                   <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
@@ -452,7 +636,7 @@ export default function OnboardingDemoPage() {
                     {instaConnected ? (
                       <CheckCircle2 className="h-5 w-5 text-green-500" />
                     ) : (
-                      <span className="text-xs text-gray-400">Non connecte</span>
+                      <span className="text-xs text-gray-400">Plus tard</span>
                     )}
                   </div>
                   <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
@@ -461,6 +645,17 @@ export default function OnboardingDemoPage() {
                       <span className="text-sm font-medium">Widget Web</span>
                     </div>
                     <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <Package className="h-4 w-4 text-amber-500" />
+                      <span className="text-sm font-medium">{products.length} produit{products.length > 1 ? "s" : ""}</span>
+                    </div>
+                    {products.length > 0 ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <span className="text-xs text-gray-400">Plus tard</span>
+                    )}
                   </div>
                 </div>
 

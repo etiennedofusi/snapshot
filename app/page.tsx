@@ -222,30 +222,32 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                emoji: "📱",
+                img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&q=80",
                 problem: "\"J'ai 30 messages WhatsApp non lus\"",
                 solution: "L'IA repond a tous vos clients instantanement, 24h/24",
               },
               {
-                emoji: "📝",
+                img: "https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=600&h=400&fit=crop&q=80",
                 problem: "\"Je note les commandes sur un carnet\"",
                 solution: "Tout est numerique, organise, avec historique et statistiques",
               },
               {
-                emoji: "💸",
+                img: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=600&h=400&fit=crop&q=80",
                 problem: "\"Les clients oublient de venir chercher\"",
                 solution: "Notification automatique + paiement en ligne en amont",
               },
             ].map((item) => (
               <div
                 key={item.problem}
-                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="text-4xl mb-4">{item.emoji}</div>
-                <p className="font-bold text-red-500 text-base mb-3">{item.problem}</p>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-600 leading-relaxed">{item.solution}</p>
+                <img src={item.img} alt="" className="w-full h-44 object-cover" />
+                <div className="p-5">
+                  <p className="font-bold text-red-500 text-base mb-3">{item.problem}</p>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-gray-600 leading-relaxed">{item.solution}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -270,6 +272,7 @@ export default function HomePage() {
                 title: "Creez votre boutique",
                 desc: "Nom, adresse, horaires. C'est tout.",
                 color: "bg-green-500",
+                img: "https://images.unsplash.com/photo-1556742208-999815fca738?w=300&h=200&fit=crop&q=80",
               },
               {
                 step: "2",
@@ -277,6 +280,7 @@ export default function HomePage() {
                 title: "Connectez vos canaux",
                 desc: "WhatsApp, Instagram, et/ou widget web. En 2 clics.",
                 color: "bg-blue-500",
+                img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=300&h=200&fit=crop&q=80",
               },
               {
                 step: "3",
@@ -284,6 +288,7 @@ export default function HomePage() {
                 title: "Ajoutez vos produits",
                 desc: "Nom, prix, photo. L'IA fait le reste.",
                 color: "bg-purple-500",
+                img: "https://images.unsplash.com/photo-1549931319-a545753467c8?w=300&h=200&fit=crop&q=80",
               },
               {
                 step: "4",
@@ -291,13 +296,14 @@ export default function HomePage() {
                 title: "Recevez des commandes",
                 desc: "Les clients ecrivent, l'IA commande, vous preparez.",
                 color: "bg-amber-500",
+                img: "https://images.unsplash.com/photo-1556742393-d75f468bfcb0?w=300&h=200&fit=crop&q=80",
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className={`${item.color} h-14 w-14 rounded-2xl flex items-center justify-center text-white mx-auto mb-4`}>
-                  <item.icon className="h-7 w-7" />
+                <div className="rounded-xl overflow-hidden mb-4 mx-auto max-w-[200px]">
+                  <img src={item.img} alt={item.title} className="w-full h-28 object-cover" />
                 </div>
-                <div className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-xs font-bold text-gray-500 mb-3">
+                <div className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-xs font-bold text-gray-500 mb-2">
                   {item.step}
                 </div>
                 <h3 className="text-base font-bold mb-1">{item.title}</h3>
@@ -379,6 +385,67 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ==================== LIFESTYLE GALLERY ==================== */}
+      <section className="py-20 bg-white overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-black mb-4">Des commercants heureux, des clients satisfaits</h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              SnapShop s&apos;adapte a tous les commerces de proximite
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {/* Row 1 */}
+            <div className="rounded-2xl overflow-hidden row-span-2 aspect-[3/4] md:aspect-auto">
+              <img
+                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=700&fit=crop&q=80"
+                alt="Boulanger souriant"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="rounded-2xl overflow-hidden aspect-square">
+              <img
+                src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop&q=80"
+                alt="Pains frais"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="rounded-2xl overflow-hidden aspect-square">
+              <img
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop&q=80"
+                alt="Plat de restaurant"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="rounded-2xl overflow-hidden row-span-2 aspect-[3/4] md:aspect-auto">
+              <img
+                src="https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=500&h=700&fit=crop&q=80"
+                alt="Commercante avec tablette"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            {/* Row 2 */}
+            <div className="rounded-2xl overflow-hidden aspect-square">
+              <img
+                src="https://images.unsplash.com/photo-1555507036-ab1f4038024a?w=400&h=400&fit=crop&q=80"
+                alt="Croissants"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="rounded-2xl overflow-hidden aspect-square relative">
+              <img
+                src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=400&h=400&fit=crop&q=80"
+                alt="Interieur boulangerie"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                <p className="text-white text-sm font-bold">+150 commerces nous font confiance</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ==================== TESTIMONIALS ==================== */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
@@ -392,32 +459,38 @@ export default function HomePage() {
                 role: "Boulangerie Marie, Paris 2e",
                 quote: "Mes clients commandent sur WhatsApp en 30 secondes. J'ai augmente mon CA de 40% en click & collect.",
                 stars: 5,
+                avatar: "https://images.unsplash.com/photo-1594744803329-e58b31239ac0?w=120&h=120&fit=crop&crop=face&q=80",
               },
               {
                 name: "Karim B.",
                 role: "Traiteur Le Cedre, Lyon",
                 quote: "Avant je perdais 1h par jour a repondre aux messages. Maintenant l'IA gere tout et je me concentre sur la cuisine.",
                 stars: 5,
+                avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=120&h=120&fit=crop&crop=face&q=80",
               },
               {
                 name: "Sophie L.",
                 role: "Fromagerie Sophie, Bordeaux",
                 quote: "L'onboarding a pris 5 minutes. Mes clients adorent commander par Instagram DM. C'est magique.",
                 stars: 5,
+                avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&h=120&fit=crop&crop=face&q=80",
               },
             ].map((t) => (
               <div key={t.name} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex gap-0.5 mb-3">
+                <div className="flex gap-0.5 mb-4">
                   {Array.from({ length: t.stars }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                <p className="text-gray-700 text-sm leading-relaxed mb-5">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div>
-                  <p className="font-bold text-sm">{t.name}</p>
-                  <p className="text-xs text-gray-400">{t.role}</p>
+                <div className="flex items-center gap-3">
+                  <img src={t.avatar} alt={t.name} className="h-11 w-11 rounded-full object-cover ring-2 ring-gray-100" />
+                  <div>
+                    <p className="font-bold text-sm">{t.name}</p>
+                    <p className="text-xs text-gray-400">{t.role}</p>
+                  </div>
                 </div>
               </div>
             ))}
